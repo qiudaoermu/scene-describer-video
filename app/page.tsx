@@ -2,9 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
-import { aiCreateText } from "./text-test.js"
 import { aiUnderStandVideo } from "./video-understanding.js"
-import { aiDescribeImage } from "./image-understanding.js"
 import axios from "axios";
 import ReactMarkdown from "react-markdown";
 import { usePexelsPhotos, PexelsPhoto } from "./hook/usePexelsPhotos";
@@ -200,25 +198,7 @@ console.log(session, "session");
       }
     }
   };
-  const handleAiDescribeImage = async () => {
-    if (!userText.trim()) {
-      setError("Please enter a description or question about the image");
-      return;
-    }
 
-    setError("");
-    setLoading(true);
-
-    try {
-      const result = await aiDescribeImage(imageFile, userText);
-      setImageSummary(result);
-    } catch (error) {
-      console.error("Error describing image:", error);
-      setError("Failed to describe image. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
   const handleSubmit = async () => {
     if (mode === "text" && !userText.trim()) {
       setError("请输入文本");
@@ -624,71 +604,9 @@ console.log(session, "session");
                 alignItems: "center",
               }}
             >
-              {mode === "text" && (
-                <button
-                  onClick={aiCreateText}
-                  style={{
-                    padding: "6px 12px",
-                    fontSize: "13px",
-                    fontWeight: "500",
-                    border: "1px solid #6b7280",
-                    borderRadius: "8px",
-                    backgroundColor: "#4b5563",
-                    color: "#e5e7eb",
-                    cursor: "pointer",
-                    transition: "all 0.2s ease",
-                    boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "4px",
-                  }}
-                  onMouseEnter={(e) => {
-                    const target = e.target as HTMLButtonElement;
-                    target.style.backgroundColor = "#6b7280";
-                    target.style.borderColor = "#9ca3af";
-                  }}
-                  onMouseLeave={(e) => {
-                    const target = e.target as HTMLButtonElement;
-                    target.style.backgroundColor = "#4b5563";
-                    target.style.borderColor = "#6b7280";
-                  }}
-                >
-                  ✨ 生成文本
-                </button>
-              )}
+             
 
-              {mode === "image" && (
-                <button
-                  onClick={handleAiDescribeImage}
-                  style={{
-                    padding: "6px 12px",
-                    fontSize: "13px",
-                    fontWeight: "500",
-                    border: "1px solid #6b7280",
-                    borderRadius: "8px",
-                    backgroundColor: "#4b5563",
-                    color: "#e5e7eb",
-                    cursor: "pointer",
-                    transition: "all 0.2s ease",
-                    boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "4px",
-                  }}
-                  onMouseEnter={(e) => {
-                    const target = e.target as HTMLButtonElement;
-                    target.style.backgroundColor = "#6b7280";
-                    target.style.borderColor = "#9ca3af";
-                  }}
-                  onMouseLeave={(e) => {
-                    const target = e.target as HTMLButtonElement;
-                    target.style.backgroundColor = "#4b5563";
-                    target.style.borderColor = "#6b7280";
-                  }}
-                >
-                  🖼️ 描述图片
-                </button>
-              )}
+            
 
               <button
                 onClick={
