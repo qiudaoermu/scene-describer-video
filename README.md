@@ -288,15 +288,15 @@ NEXT_PUBLIC_YOUTUBE_API_KEY=your_youtube_api_key
 ## 📞 联系信息
 
 ### 开发团队
-- **项目负责人**: [您的姓名]
+
 - **技术架构**: Next.js + AI + MongoDB
-- **开发周期**: [项目开发时间]
+- **开发周期**: 1M
 - **版本**: v1.0.0
 
 ### 技术支持
 - **文档**: 详细的API和使用文档
 - **社区**: GitHub Issues和讨论区
-- **邮箱**: [support@yourproject.com]
+- **邮箱**: [qiudaoermu@gmail.com]
 - **更新**: 定期功能更新和安全补丁
 
 ---
