@@ -7,55 +7,111 @@ import GitlabProvider from "next-auth/providers/gitlab";
 import type { Session, User } from 'next-auth'
 // 简化配置，暂时不使用MongoDB适配器以避免版本兼容性问题
 
-export const authOptions: NextAuthOptions = {
-  providers: [
-    GitHubProvider({
-      clientId: process.env.GITHUB_CLIENT_ID!,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
-      allowDangerousEmailAccountLinking: true,
-      httpOptions: {
-        timeout: 50000, // 增加超时时间到50秒
-      },
-    }),
-    GitlabProvider({
-      clientId: process.env.GITLAB_ID!,
-      clientSecret: process.env.GITLAB_SECRET!,
-      httpOptions: {
-        timeout: 50000, // 将超时时间增加到 10 秒
-      },
-    }),
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      httpOptions: {
-        timeout: 50000, // 将超时时间增加到 10 秒
-      },
-    }),
-    TwitterProvider({
-      clientId: process.env.TWITTER_ID!,
-      clientSecret: process.env.TWITTER_SECRET!,
-      client: {
+// 根据环境动态配置OAuth提供商
+const getProviders = () => {
+  const providers = [];
+  
+  // GitHub - 开发和生产环境都支持
+  
+  
+  // Google - 生产环境或有配置时启用
+  if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+    providers.push(
+      GoogleProvider({
+        clientId: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         httpOptions: {
-          timeout: 20000, // 若终端里有超时报错，则延长超时时间
+          timeout: 50000,
         },
-      },
-      version: "2.0", // 重要
-      authorization: {
-        params: {
-          scope: "tweet.read users.read follows.read offline.access", // 访问权限
+      })
+    );
+  }
+  
+  // GitLab - 仅在生产环境或明确配置时启用
+  if (
+    process.env.NODE_ENV === "production"
+  ) {
+    // 生产环境下，使用生产环境的GitLab配置
+    providers.push(
+      GitlabProvider({
+        clientId: process.env.GITLAB_ID_PROD!,
+        clientSecret: process.env.GITLAB_SECRET_PROD!,
+        httpOptions: {
+          timeout: 50000,
         },
-      },
-      profile(profile) {
-        // 这一步是为了拿到twitter更详细的用户信息，否则下面的session只能取到name，而取不到username
-        return {
-          id: profile.data.id,
-          name: profile.data.name,
-          screen_name: profile.data.username,
-          image: profile.data.profile_image_url,
-        };
-      },
-    }),
-  ],
+      })
+    );
+    // 生产环境下，也添加开发环境的GitHub配置
+    providers.push(
+      GitHubProvider({
+        clientId: process.env.GITHUB_CLIENT_ID_PROD!,
+        clientSecret: process.env.GITHUB_CLIENT_SECRET_PROD!,
+        allowDangerousEmailAccountLinking: true,
+        httpOptions: {
+          timeout: 50000,
+        },
+      })
+    );
+  } else {
+
+    providers.push(
+      GitHubProvider({
+        clientId: process.env.GITHUB_CLIENT_ID!,
+        clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+        allowDangerousEmailAccountLinking: true,
+        httpOptions: {
+          timeout: 50000,
+        },
+      })
+    );
+
+
+    providers.push(
+      GitlabProvider({
+        clientId: process.env.GITLAB_ID!,
+        clientSecret: process.env.GITLAB_SECRET!,
+        httpOptions: {
+          timeout: 50000,
+        },
+      })
+    );
+  }
+  
+  
+  // Twitter - 仅在生产环境或明确配置时启用
+  if  (process.env.TWITTER_ID && process.env.TWITTER_SECRET) {
+    providers.push(
+      TwitterProvider({
+        clientId: process.env.TWITTER_ID,
+        clientSecret: process.env.TWITTER_SECRET,
+        client: {
+          httpOptions: {
+            timeout: 20000,
+          },
+        },
+        version: "2.0",
+        authorization: {
+          params: {
+            scope: "tweet.read users.read follows.read offline.access",
+          },
+        },
+        profile(profile: { data?: { id: string; name: string; username: string; profile_image_url: string }; id?: string; name?: string; username?: string; profile_image_url?: string }) {
+            return {
+              id: profile.data?.id || profile.id || '',
+              name: profile.data?.name || profile.name || '',
+              screen_name: profile.data?.username || profile.username || '',
+              image: profile.data?.profile_image_url || profile.profile_image_url || '',
+            };
+          },
+      })
+    );
+  }
+  
+  return providers;
+};
+
+export const authOptions: NextAuthOptions = {
+  providers: getProviders(),
   callbacks: {
     async jwt({ token, account, profile }) {
       // 在JWT中保存用户信息
