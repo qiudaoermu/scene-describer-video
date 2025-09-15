@@ -301,6 +301,6 @@ NEXT_PUBLIC_YOUTUBE_API_KEY=your_youtube_api_key
 
 ---
 
-*本文档最后更新时间: 2024年1月*
+*本文档最后更新时间: 2025年9月*
 
 *Scene Describer Next - 让AI理解每一帧精彩* 🎬✨
