@@ -1,36 +1,306 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 视频场景描述器 - 产品文档
 
-## Getting Started
+## 📋 产品概述
 
-First, run the development server:
+### 产品名称
+**Scene Describer Next** - 智能视频场景描述器
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### 产品定位
+基于AI技术的视频内容分析平台，为用户提供智能化的视频场景描述、内容理解和个性化分析服务。
+
+### 核心价值
+- 🎯 **智能分析**: 利用先进的AI技术深度理解视频内容
+- 🔐 **个人化**: 支持多平台登录，个人数据安全隔离
+- ⚡ **实时体验**: 流式生成分析结果，即时反馈
+- 📊 **数据管理**: 完整的历史记录和数据追踪
+
+## 🎯 目标用户
+
+### 主要用户群体
+1. **内容创作者**: 需要快速了解视频内容的创作者
+2. **教育工作者**: 需要分析教学视频内容的教师
+3. **研究人员**: 需要批量分析视频数据的学者
+4. **普通用户**: 对视频内容有深度理解需求的个人用户
+
+### 用户痛点
+- 手动分析视频内容耗时费力
+- 缺乏专业的视频内容理解工具
+- 无法保存和管理分析历史
+- 需要个性化的分析服务
+
+## 🚀 核心功能
+
+### 1. 智能视频分析
+**功能描述**: 基于AI技术的视频内容深度分析
+
+**主要特性**:
+- 📹 **多源视频支持**: 支持YouTube视频链接分析
+- 🤖 **AI驱动**: 集成Google Gemini AI进行内容理解
+- ⚡ **流式生成**: 实时显示分析进度和结果
+- 🎯 **自定义提问**: 用户可针对视频内容提出特定问题
+
+**技术实现**:
+- 前端: React + Next.js 15.5.2
+- AI服务: Google Generative AI (Gemini)
+- 流式处理: Server-Sent Events
+
+### 2. 用户认证系统
+**功能描述**: 多平台OAuth登录，确保用户数据安全
+
+**支持平台**:
+- 🔐 **Google OAuth**: 主要登录方式
+- 🐙 **GitHub OAuth**: 开发者友好
+- 🔒 **JWT会话**: 安全的会话管理
+
+**安全特性**:
+- 端到端加密的用户会话
+- 个人数据完全隔离
+- 符合OAuth 2.0标准
+
+### 3. 数据管理系统
+**功能描述**: 完整的用户数据存储和管理
+
+**数据模型**:
+```javascript
+// 视频分析记录
+{
+  videoId: String,        // 视频唯一标识
+  videoTitle: String,     // 视频标题
+  videoUrl: String,       // 视频链接
+  userQuery: String,      // 用户问题
+  aiDescription: String,  // AI分析结果
+  userId: String,         // 用户ID
+  userEmail: String,      // 用户邮箱
+  createdAt: Date,        // 创建时间
+  updatedAt: Date         // 更新时间
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**存储方案**:
+- 数据库: MongoDB Atlas
+- 索引优化: 用户ID、创建时间复合索引
+- 数据隔离: 严格的用户级数据分离
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 4. 历史记录管理
+**功能描述**: 个人分析历史的查看和管理
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**主要功能**:
+- 📊 **历史查看**: 按视频查看个人分析历史
+- 🔍 **快速检索**: 基于时间和内容的快速查找
+- 📱 **响应式界面**: 适配各种设备的历史记录界面
+- 🗂️ **数据导出**: 支持分析结果的导出功能
 
-## Learn More
+## 🎨 用户界面设计
 
-To learn more about Next.js, take a look at the following resources:
+### 设计理念
+- **暗黑模式**: 现代化的深色主题设计
+- **简洁直观**: 清晰的信息层次和操作流程
+- **响应式**: 完美适配桌面和移动设备
+- **无障碍**: 符合Web无障碍设计标准
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 主要界面
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+#### 1. 主页面
+- 用户登录状态显示
+- 视频选择和输入区域
+- 实时分析结果展示
+- 历史记录快速访问
 
-## Deploy on Vercel
+#### 2. 视频分析界面
+- 视频预览窗口
+- 问题输入框
+- 流式结果显示
+- 自动滚动跟随
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+#### 3. 历史记录界面
+- 固定标题栏
+- 滚动内容区域
+- 时间排序显示
+- 快速操作按钮
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 交互设计
+- **流式反馈**: 分析过程中的实时进度显示
+- **自动滚动**: 内容生成时自动跟随最新内容
+- **一键操作**: 简化的用户操作流程
+- **错误处理**: 友好的错误提示和恢复机制
+
+## 🛠️ 技术架构
+
+### 前端技术栈
+```
+Next.js 15.5.2          # React全栈框架
+React 19.1.0            # 用户界面库
+NextAuth.js 4.24.11     # 认证解决方案
+React Markdown          # Markdown渲染
+Tailwind CSS            # 样式框架
+TypeScript              # 类型安全
+```
+
+### 后端技术栈
+```
+Next.js API Routes      # 服务端API
+MongoDB Atlas          # 云数据库
+Mongoose               # ODM对象映射
+Google Gemini AI       # AI分析服务
+JWT                    # 会话管理
+```
+
+### 部署架构
+```
+用户浏览器
+    ↓
+Next.js应用 (Vercel/自托管)
+    ↓
+API路由层
+    ↓
+┌─────────────────┬─────────────────┐
+│   MongoDB Atlas  │  Google AI API  │
+│   (数据存储)      │   (AI分析)       │
+└─────────────────┴─────────────────┘
+```
+
+### 安全架构
+- **OAuth 2.0**: 标准化的第三方登录
+- **JWT Token**: 加密的会话令牌
+- **HTTPS**: 全程加密传输
+- **环境变量**: 敏感信息隔离
+- **数据隔离**: 用户级数据访问控制
+
+## 📊 功能特性详解
+
+### 1. 智能分析引擎
+**AI模型**: Google Gemini Pro
+**处理能力**: 
+- 视频内容理解
+- 场景描述生成
+- 问答式交互
+- 多语言支持
+
+**分析类型**:
+- 场景描述
+- 人物识别
+- 动作分析
+- 情感理解
+- 内容摘要
+
+### 2. 流式用户体验
+**实时反馈**:
+- 逐字符流式显示
+- 自动滚动跟随
+- 进度状态指示
+- 错误实时处理
+
+**性能优化**:
+- 防抖机制减少重渲染
+- 虚拟滚动优化长内容
+- 懒加载历史记录
+- 缓存策略提升响应速度
+
+### 3. 数据持久化
+**存储策略**:
+- 实时保存分析结果
+- 增量备份用户数据
+- 自动数据清理机制
+- 数据完整性校验
+
+**查询优化**:
+- 复合索引设计
+- 分页查询支持
+- 缓存热点数据
+- 异步数据加载
+
+## 🔧 开发与部署
+
+### 开发环境要求
+```bash
+Node.js >= 18.0.0
+pnpm >= 8.0.0
+MongoDB >= 6.0
+```
+
+### 环境变量配置
+```bash
+# AI服务
+GOOGLE_GENERATIVE_AI_API_KEY=your_api_key
+
+# 数据库
+MONGODB_URI=mongodb+srv://...
+
+# 认证服务
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your_secret_key
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+GITHUB_CLIENT_ID=your_github_client_id
+GITHUB_CLIENT_SECRET=your_github_client_secret
+
+# YouTube API
+NEXT_PUBLIC_YOUTUBE_API_KEY=your_youtube_api_key
+```
+
+### 部署流程
+1. **构建应用**: `pnpm build`
+2. **环境配置**: 设置生产环境变量
+3. **数据库迁移**: 运行数据库初始化脚本
+4. **服务启动**: `pnpm start`
+5. **健康检查**: 验证各项服务正常
+
+## 📈 产品路线图
+
+### 已完成功能 ✅
+- [x] 基础视频分析功能
+- [x] 用户认证系统
+- [x] 数据存储和管理
+- [x] 历史记录查看
+- [x] 流式用户体验
+- [x] 暗黑模式界面
+- [x] 响应式设计
+
+### 计划中功能 🚧
+- [ ] 批量视频分析
+- [ ] 分析结果导出
+- [ ] 视频标签系统
+- [ ] 协作分享功能
+- [ ] 移动端应用
+- [ ] API开放平台
+
+### 未来展望 🔮
+- [ ] 多模态AI分析（图像+音频+文本）
+- [ ] 实时视频流分析
+- [ ] 企业级部署方案
+- [ ] 插件生态系统
+- [ ] 国际化多语言支持
+
+## 🎯 商业模式
+
+### 目标市场
+- **B2C市场**: 个人用户订阅服务
+- **B2B市场**: 企业级解决方案
+- **教育市场**: 教育机构定制服务
+- **开发者市场**: API服务和插件
+
+### 盈利模式
+1. **订阅服务**: 按月/年收费的高级功能
+2. **API调用**: 按使用量计费的开发者服务
+3. **企业定制**: 私有化部署和定制开发
+4. **数据洞察**: 匿名化数据分析服务
+
+## 📞 联系信息
+
+### 开发团队
+- **项目负责人**: [您的姓名]
+- **技术架构**: Next.js + AI + MongoDB
+- **开发周期**: [项目开发时间]
+- **版本**: v1.0.0
+
+### 技术支持
+- **文档**: 详细的API和使用文档
+- **社区**: GitHub Issues和讨论区
+- **邮箱**: [support@yourproject.com]
+- **更新**: 定期功能更新和安全补丁
+
+---
+
+*本文档最后更新时间: 2024年1月*
+
+*Scene Describer Next - 让AI理解每一帧精彩* 🎬✨
